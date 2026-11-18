@@ -1026,7 +1026,6 @@ const createTray = () => {
 
 const handleResourceProtocolRequest = createResourceProtocolHandler({
   getDirectory: resourceCacheDirectory,
-  getIntegrity: resourceId => sidecar?.request("resource.integrity", { resourceId }),
   getApiBaseUrl: () => configuredApiBaseUrl,
   getRequestHeaders: async sourceUrl => {
     const sessionToken = credentialForUrl(desktopSessionToken, desktopSessionTokenOrigin, sourceUrl);
@@ -2167,7 +2166,7 @@ const startApplication = async () => {
       await restrictDirectory(directory);
       assertCurrent();
       await writeAttachmentFile(join(directory, `${resource.id}.bin`), bytes);
-      await writeAttachmentFile(join(directory, `${resource.id}.json`), JSON.stringify({ contentType: resource.mimeType, byteSize: resource.byteSize, sha256: resource.sha256 }));
+      await writeAttachmentFile(join(directory, `${resource.id}.json`), JSON.stringify({ contentType: resource.mimeType }));
       assertCurrent();
       if (!currentSidecar) throw new Error("Sidecar unavailable");
       await currentSidecar.request("resource.cache", { resource });
